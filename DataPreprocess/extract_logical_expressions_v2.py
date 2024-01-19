@@ -629,17 +629,17 @@ def save_all_extended_context(data_type=0):
     if data_type == 0:
         all_context_constituents_file = '../reclor-data/train_context_constituents_file.npy'
         all_options_constituents_file = '../reclor-data/train_options_constituents_file.npy'
-        # extended_logic_file = '../reclor-data/train_extended_logic.npy'
+        extended_logic_file = '../reclor-data/train_extended_logic.npy'
         extended_context_file = '../reclor-data/train_extended_context_cp_v5.npy'
     elif data_type == 1:
         all_context_constituents_file = '../reclor-data/val_context_constituents_file.npy'
         all_options_constituents_file = '../reclor-data/val_options_constituents_file.npy'
-        # extended_logic_file = '../reclor-data/val_extended_logic.npy'
+        extended_logic_file = '../reclor-data/val_extended_logic.npy'
         extended_context_file = '../reclor-data/val_extended_context_cp_v5.npy'
     else:
         all_context_constituents_file = '../reclor-data/test_context_constituents_file.npy'
         all_options_constituents_file = '../reclor-data/test_options_constituents_file.npy'
-        # extended_logic_file = '../reclor-data/test_extended_logic.npy'
+        extended_logic_file = '../reclor-data/test_extended_logic.npy'
         extended_context_file = '../reclor-data/test_extended_context_cp_v5.npy'
 
     # v3: same for all question type (prem) + extend num 2
@@ -652,7 +652,7 @@ def save_all_extended_context(data_type=0):
     # v8: same for all question type (prem + conclusion) + extend num 3, rank related extension
 
     all_extended_contexts = list()
-    # all_extended_logic = list()
+    all_extended_logic = list()
 
     conclusions_premises_constituents = np.load(all_context_constituents_file)
     answers_constituents = np.load(all_options_constituents_file)
@@ -667,7 +667,7 @@ def save_all_extended_context(data_type=0):
         answer_list = answers_constituents[i]
 
         cur_all_extended_context, max_length, logic_result  = get_cur_all_extended_text(conclusions, premises, answer_list)
-        # all_extended_logic.append(logic_result)
+        all_extended_logic.append(logic_result)
 
         if max_length[0] > 0:
             has_extend_instance_num += 1
@@ -679,8 +679,8 @@ def save_all_extended_context(data_type=0):
 
     print(has_extend_instance_num, has_extend_context_num, np.mean(answer_extend_num)/4)
 
-    np.save(extended_context_file, all_extended_contexts)
-    # np.save(extended_logic_file, all_extended_logic)
+    np.savetxt(extended_context_file, all_extended_contexts, fmt="%s")
+    np.savetxt(extended_logic_file, all_extended_logic, fmt="%s")
 
 
 # get all constituents in the text using allennlp
@@ -724,8 +724,8 @@ def get_all_constituents(data_type=0):
             all_context_constituents.append(cur_context_constituents)
             all_options_constituents.append(cur_options_constituents)
 
-        np.save(all_context_constituents_file, all_context_constituents)
-        np.save(all_options_constituents_file, all_options_constituents)
+        np.savetxt(all_context_constituents_file, all_context_constituents, fmt="%s")
+        np.savetxt(all_options_constituents_file, all_options_constituents, fmt="%s")
 
 
 if __name__ == '__main__':
